@@ -10,21 +10,14 @@ Our group will be working with the **[AirBnb data](http://insideairbnb.com/get-t
 
 Our target audiences are *tourists* and *visitors* in Seattle who use Airbnb to plan their stay. Because a wide variety of people are likely to visit Seattle, we are focusing on the demographic of people who prefer to select the most cost effective choice, such as younger adults.
 
-The target audience would most benefit from learning about **cost effective options** to optimize the quality of their stay. Because **location** is one of the most important factors in selecting an Airbnb, our questions focus on exploring the *effects of location on price, availability, amenities and housing options*. By choosing location as an independent variable, our target audience can learn more about their options in Seattle based on where they want to stay.
+The target audience would most benefit from learning about **cost effective options** to optimize the quality of their stay. Because **location** is one of the most important factors in selecting an Airbnb, our questions focus on exploring the *effects of location on price, availability, amenities and housing options*. By choosing location as an independent variable, our target audience can learn more about their options in Seattle based on where they want to stay. Analyzing the above variables would give us further insight into both AirBnb guests and the hosts.
+
 
 ### Specific Questions
-* Which neighborhoods in Seattle have more available Airbnb options based on the time of year?
-* Does the location of the Airbnb affect the amount of bedrooms and bathrooms?
-* Neighborhoods are most expensive for renting Airbnbs?
-* Are there neighborhoods in Seattle where it costs more for an Airbnb to have more bathrooms? (bathroom to price ratio based on location)
-* Are there neighborhoods in Seattle where it costs more for an Airbnb to have more bedrooms? (bedroom to price ratio based on location)
-* How does the amount of bedrooms affect the price of an Airbnb listing?
-* How does the amount of bathrooms affect the price of an Airbnb listing?
-* What is the most common combination of amenities for an Airbnb listing? Does this change or depend on the neighborhood?
-* Which locations in Seattle do Airbnb listings get more reviews per month?
-* Which neighborhoods have the most futons and which neighborhoods have the most real beds?
-* To what extent does the availability of wifi affect the availability of an airbnb?
-* How many AirBnb hosts live in the same neighborhood as their listings?
+* How does the location and the time of year affect the availability and pricing of AirBnb options?
+* How does the pricing of AirBnb options affect available amenities?
+* Which locations of Seattle AirBnb listings get the most positive reviews and which the most negative?
+* What kind of features and amenities are the most commonly available in Seattle?
 
 ## Technical Description
 
