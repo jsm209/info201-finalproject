@@ -24,16 +24,17 @@ The target audience would most benefit from learning about **cost effective opti
 * Which locations in Seattle do Airbnb listings get more reviews per month?
 * Which neighborhoods have the most futons and which neighborhoods have the most real beds?
 * To what extent does the availability of wifi affect the availability of an airbnb?
+* How many AirBnb hosts live in the same neighborhood as their listings?
 
 ## Technical Description
 
 ### Reading in Data
 
-We are using datasets provided by [InsideAirBnb](http://insideairbnb.com/get-the-data.html). Because the data is in a `.csv` file, we can use built in R functions to read in the file to a `dataframe` to analyze.
+We are using datasets provided by [InsideAirBnb](http://insideairbnb.com/get-the-data.html), specific to Seattle. InsideAirBnb provides several different useful datasets, all in `.csv` file format. Because the data is in a `.csv` file, we can use built in R functions to read in the file to a `dataframe` to analyze (i.e. `read.csv()`). The main dataset we are focusing on is the `listings.csv` summary dataset.
 
 ### Types of Data-Wrangling
 
-There are many columns in the Airbnb dataset that we will most likely not consider, such as columns like “cancelation”, which is a characteristic describing their cancellation policies, or “notes” which is a literal note left by the landlord. Therefore, `filtering` columns with `dplyr`, and parsing other string based column data (like the offered amenities for a listing) are steps that need to be taken to clean our data.
+The main summary listings dataset contains information regarding listing name, information regarding the hosts, information regarding the available AirBnb, as well as reviews and geographical data (i.e. latitude, longitude). There are many columns in the extensive and summary listings datasets that we will most likely not consider, such as columns like “cancelation”, which is a characteristic describing their cancellation policies, or “notes” which is a literal note left by the landlord. Therefore, `filtering` columns with `dplyr`, and parsing other string based column data (like the offered amenities for a listing) are steps that need to be taken to clean our data.
 
 ### Library Used in Project
 
