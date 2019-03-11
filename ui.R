@@ -10,7 +10,7 @@ shinyUI(navbarPage(
     sidebarLayout(
       sidebarPanel(
         h3("Seattle"),
-        selectInput(
+        checkboxGroupInput(
           inputId = "location",
           label = "Filter by:",
           choices = c("Ballard", "Beacon Hill", "Capitol Hill",
@@ -18,14 +18,20 @@ shinyUI(navbarPage(
                       "Downtown","Interbay","Lake City",
                       "Magnolia","Northgate","Other neighbourhoods",
                       "Queen Anne","Rainier Valley","Seward Park",
-                      "University District","West Seattle")
+                      "University District","West Seattle"),
+          selected = c("Ballard", "Beacon Hill", "Capitol Hill",
+                       "Cascade","Central Area","Delridge",
+                       "Downtown","Interbay","Lake City",
+                       "Magnolia","Northgate","Other neighbourhoods",
+                       "Queen Anne","Rainier Valley","Seward Park",
+                       "University District","West Seattle")
         )
       ),
       mainPanel(
         p("This is an interactive heatmap showing the locations 
           that are the most populated with Airbnb's in the Seattle Area.
-          You can choose to zoom into specific neighbourhood group to see
-          location "),
+          You can choose to zoom into specific neighbourhood(s) group to see
+          that particular area's Airbnb."),
         leafletOutput("interactive_map")
       )
     )
