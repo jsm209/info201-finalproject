@@ -1,29 +1,23 @@
 library(dplyr)
 library(ggplot2)
 library(leaflet)
+library(leaflet.extras)
 
-# "build_map" takes in a dataframe, which is assumed to be the InsideAirbnb 
-# "listings" dataset, creates, and returns an interactive map of points 
-# that cluster and present additional information when hovered over or 
-# clicked on.
-build_map <- function(df) {
-  interactive_map <- leaflet() %>%
-    addTiles() %>% 
-    addMarkers(
-      clusterOptions = markerClusterOptions(),
-      lng = df$longitude,
-      lat = df$latitude,
-      label = paste0(
-        listings$name,
-        " ( Click for more information )"
-      ),
-      popup = paste(
-        "Name:", df$name, "<br>",
-        "Neighbourhood:", df$neighbourhood, "<br>",
-        "Price: ", df$price, "<br>",
-        "Type:", df$room_type, "<br>",
-        "Minimum Nights:", df$minimum_nights
-      )
-    ) %>%
-  return()
+# "build_map" will take in a dataframe
+#  which is the InsideAirbnb "listings" dataset
+#  It will return an interactive heatmap 
+#  of the locations that are most populated with Airbnb's
+
+build_map <- function(df,user_nb){
+  df_neighbourhood <- df %>%
+    select(neighbourhood_group,longitude,latitude)%>%
+    filter(neighbourhood_group %in% user_nb)
+  interactive_map <- leaflet(df_neighbourhood) %>%
+    addProviderTiles(providers$Stamen.Toner)%>%
+    addHeatmap(lng=~df_neighbourhood$longitude, 
+               lat=~df_neighbourhood$latitude, 
+               blur = 24, 
+               max = 0.05, 
+               radius = 15)%>%
+    return()
 }
