@@ -14,24 +14,29 @@ library(htmlwidgets)
 library(data.tree)
 library(d3treeR)
 
+# "average_by_neighbourhood" takes in a dataframe, which is assumed to be
+# the InsideAirbnb "listings" dataset, and the neighbourhoods dataset 
+# associated with the listings. Then, it will use it to compute averages 
+# and associate neighbourhood with its neighbourhood group
+average_by_neighbourhood <- function(data, neighbourhoods) {
+  group_by(data, neighbourhood) %>%
+    summarise_all(funs(mean)) %>%
+    left_join(neighbourhoods)
+}
+
 # "build_treemap" takes in a dataframe, which is assumed to be the InsideAirbnb
-# "listings" dataset, and a variable to plot, which can be the following: 
+# "listings" dataset, the neighbourhoods dataset associated with the listings,
+# and a variable to plot, which can be the following: 
 # price, availability_365, number_of_reviews_ minimum_nights.
 # Will construct an interactive treemap.
-build_treemap <- function(listings, neighourhoods, variable) {
+build_treemap <- function(listings, neighbourhoods, variable="price") {
 
   # Get relevant columns
   filtered <- select(listings, neighbourhood, price, minimum_nights,
                      number_of_reviews, availability_365)
 
-  # Imports the names of the neighborhoods.
-  neighbourhoods <- read.csv("data/neighbourhoods.csv",
-                             stringsAsFactors = FALSE)
-
   # Get averages and associate neighbourhood with its neighbourhood group
-  averages <- group_by(filtered, neighbourhood) %>%
-    summarise_all(funs(mean)) %>%
-    left_join(neighbourhoods)
+  averages <- average_by_neighbourhood(filtered, neighbourhoods)
 
   # Assigns appropriate unit for description depending on question variable
   unit <- ""
@@ -41,7 +46,7 @@ build_treemap <- function(listings, neighourhoods, variable) {
   if (variable == "availability_365") unit <- " days of the year available"
 
   # Gives every entry the appropriate label
-  averages$label <- paste0(averages$neighbourhood, " (",
+  averages$label <- paste0(averages$neighbourhood, "\n (",
                            round(averages[[variable]]), " ", unit, ")")
 
   # Builds a regular treemap using the "treemap" library.
@@ -51,15 +56,19 @@ build_treemap <- function(listings, neighourhoods, variable) {
           vColor = "neighbourhood_group",
           type = "categorical",
           palette = "Set2",
-          title = paste0("Average ", variable, " of airbnbs in Seattle."),
           fontsize.title = 14,
           algorithm = "squarified"
   )
 
+  # Builds a d3treemap2
   # Uses the previous treemap to build an interactive treemap.
   # Uses the "d3treeR" library, not found in CRAN.
   # Source of resources required for this function
   # is found at the top of the file.
-  d3tree2(tm, rootname = paste0("Average ", variable,
-                               " of airbnbs for different areas in Seattle."))
+  tm2 <- d3tree2(tm, 
+                 rootname = paste0(
+                   "Average ", 
+                   variable, 
+                   " of airbnbs for different areas in Seattle."))
+  return(tm2)
 }
