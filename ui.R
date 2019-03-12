@@ -35,5 +35,32 @@ shinyUI(navbarPage(
         leafletOutput("interactive_map")
       )
     )
+  ),
+  tabPanel(
+    "Interactive Tree Map", # label for the tab in the navbar
+    titlePanel("Tree Map of Airbnbs in Seattle"), # show with a displayed title
+    # This content uses a sidebar layout
+    sidebarLayout(
+      sidebarPanel(
+        h3("Seattle"),
+        selectInput(
+          inputId = "tree_map_variable",
+          label = "Organize Size By...",
+          choices = c("Price" = "price", 
+                      "Days Available" = "availability_365", 
+                      "Number of Reviews" = "number_of_reviews", 
+                      "Minimum Nights to Stay" = "minimum_nights"),
+          selected = "price"
+        )
+      ),
+      mainPanel(
+        p("This is an interactive tree that groups the smaller neighborhoods of
+          Seattle by their general region, then dictates their size depending
+          on the variable selected. Clicking on the boxes will allow you to 
+          explore different neighborhoods of Seattle to see their relationship 
+          relative to other neighborhoods."),
+        leafletOutput("interactive_treemap")
+      )
+    )
   )
 ))
