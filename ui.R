@@ -3,6 +3,16 @@ library(leaflet)
 library(plotly)
 library(d3treeR) # nolint
 
+# Imports the listings of Airbnbs
+listings <- read.csv("data/listings.csv", stringsAsFactors = FALSE)
+
+# Imports the names of the neighborhoods.
+neighbourhoods <- read.csv("data/neighbourhoods.csv",
+                           stringsAsFactors = FALSE)
+
+# Price range
+price_range <- range(listings$price)
+
 shinyUI(navbarPage(
   "Airbnb in Seattle",
   tabPanel(
@@ -67,8 +77,7 @@ shinyUI(navbarPage(
           style = "height: 350px; overflow: scroll",
           tableOutput("dataset")
         )
-      )
-    ),
+      )),
     HTML("        <h4>Summary of Results</h4>
         These are the main trends that we are seeing in the data:
          <ul><li></li><li></li><li></li></ul>")
@@ -79,10 +88,10 @@ shinyUI(navbarPage(
     # This content uses a sidebar layout
     sidebarLayout(
       sidebarPanel(
-        h3("Seattle"),
+        h3("Heatmap Settings"),
         checkboxGroupInput(
           inputId = "location",
-          label = "Filter by:",
+          label = "Neighborhood:",
           choices = c(
             "Ballard", "Beacon Hill", "Capitol Hill",
             "Cascade", "Central Area", "Delridge",
@@ -99,7 +108,11 @@ shinyUI(navbarPage(
             "Queen Anne", "Rainier Valley", "Seward Park",
             "University District", "West Seattle"
           )
-        )
+        ),
+        sliderInput(
+          inputId = "price_choice",
+          label = h3("Price Range"),
+          min = price_range[1], max = price_range[2], value = price_range)
       ),
       mainPanel(
         p("This is an interactive heatmap showing the locations
@@ -108,8 +121,7 @@ shinyUI(navbarPage(
           that particular area's Airbnb."),
         leafletOutput("interactive_map")
       )
-    )
-  ),
+  )),
   tabPanel(
     "Interactive Tree Map", # label for the tab in the navbar
     titlePanel("Tree Map of Airbnbs in Seattle"), # show with a displayed title
@@ -165,5 +177,4 @@ shinyUI(navbarPage(
   footer = HTML("<footer>Published by: Group BC5 (<a href=https://github.com/jasnelmoon>Nel Jee Ae Na</a>,
        <a href=https://github.com/jsm209>Joshua Maza</a>,
        <a href=https://github.com/rajoshich>Rajoshi Chakravarty</a>,
-       <a href=https://github.com/TasnimHasan>Tasnim Hasan</a>)")
-))
+       <a href=https://github.com/TasnimHasan>Tasnim Hasan</a>)")))

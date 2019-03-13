@@ -10,7 +10,6 @@ library(leaflet.extras)
 
 build_map <- function(df, user_nb){
   df_neighbourhood <- df %>%
-    select(neighbourhood_group, longitude, latitude) %>%
     filter(neighbourhood_group %in% user_nb)
   interactive_map <- leaflet(df_neighbourhood) %>%
     addProviderTiles(providers$Stamen.Toner) %>%

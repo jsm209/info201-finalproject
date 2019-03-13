@@ -17,6 +17,8 @@ shinyServer(function(input, output) {
                                        spacing = 'xs')
                            
   output$interactive_map <- renderLeaflet({
+    listings <- listings %>%
+      filter(price >= input$price_choice[1], price <= input$price_choice[2])
     build_map(listings, input$location)
   })
 
