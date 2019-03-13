@@ -1,3 +1,4 @@
+library(tidyverse)
 library(shiny)
 library(leaflet)
 library(plotly)
@@ -5,6 +6,17 @@ library(d3treeR) # nolint
 
 # Imports the listings of Airbnbs
 listings <- read.csv("data/listings.csv", stringsAsFactors = FALSE)
+
+listings_exp <- read_csv("data/listings.csv.gz")
+# extract amenities info
+amenities <- listings_exp %>%
+  separate_rows(amenities, sep = ",") %>%
+  select(id, amenities)
+amenities$amenities <- gsub("[{\"}]", "", amenities$amenities)
+
+ratings <- listings_exp %>%
+  select(id, review_scores_rating, neighbourhood_group_cleansed, price, room_type, amenities)
+
 
 # Imports the names of the neighborhoods.
 neighbourhoods <- read.csv("data/neighbourhoods.csv",
@@ -27,14 +39,12 @@ shinyUI(navbarPage(
         and working with the listings and neighborhoods datasets.
         <h4>Main Goals</h4>
         These are the major questions we are exploring in this report:
-        <ul><li>How does the location and the time of year affect the
-        availability and pricing of Airbnb options?</li>
-        <li>How does the pricing of Airbnb options affect available
-        amenities?</li>
-        <li>Which locations of Seattle Airbnb listings get the most positive
-        reviews and which the most negative?</li>
-        <li>What kind of features and amenities are the most commonly
-        available in Seattle?</li></ul>
+        <ul><li>What kind of Airbnbs are concentrated in what Seattle
+        neighborhoods?</li>
+        <li>How does the location/neighborhood of a listing affect the
+        pricing of Airbnb options?</li>
+        <li>What time of year is most popular?</li>
+        <li>Availability? Amenities? Ratings? </li></ul>
         <h4>Visualizations</h4>
         To answer the above questions, we have analyzed the data and
         processed them into three main visualizations: heatmap,
@@ -90,29 +100,35 @@ shinyUI(navbarPage(
       sidebarPanel(
         h3("Heatmap Settings"),
         checkboxGroupInput(
+          inputId = "roomtype",
+          label = "Room Type:",
+          choices = c("Entire home/apt", "Private room", "Shared room"),
+          selected = c("Entire home/apt", "Private room", "Shared room")
+        ),
+        sliderInput(
+          inputId = "price_choice",
+          label = "Price Range",
+          min = price_range[1], max = price_range[2], value = price_range),
+        checkboxGroupInput(
           inputId = "location",
           label = "Neighborhood:",
           choices = c(
             "Ballard", "Beacon Hill", "Capitol Hill",
             "Cascade", "Central Area", "Delridge",
             "Downtown", "Interbay", "Lake City",
-            "Magnolia", "Northgate", "Other neighbourhoods",
-            "Queen Anne", "Rainier Valley", "Seward Park",
-            "University District", "West Seattle"
+            "Magnolia", "Northgate", "Queen Anne", "Rainier Valley",
+            "Seward Park", "University District", "West Seattle",
+            "Other neighbourhoods"
           ),
           selected = c(
             "Ballard", "Beacon Hill", "Capitol Hill",
             "Cascade", "Central Area", "Delridge",
             "Downtown", "Interbay", "Lake City",
-            "Magnolia", "Northgate", "Other neighbourhoods",
-            "Queen Anne", "Rainier Valley", "Seward Park",
-            "University District", "West Seattle"
+            "Magnolia", "Northgate", "Queen Anne", "Rainier Valley",
+            "Seward Park", "University District", "West Seattle",
+            "Other neighbourhoods"
           )
-        ),
-        sliderInput(
-          inputId = "price_choice",
-          label = h3("Price Range"),
-          min = price_range[1], max = price_range[2], value = price_range)
+        )
       ),
       mainPanel(
         p("This is an interactive heatmap showing the locations

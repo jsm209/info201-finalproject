@@ -5,6 +5,8 @@ source("scripts/build_plot.R")
 # Imports the listings of Airbnbs
 listings <- read.csv("data/listings.csv", stringsAsFactors = FALSE)
 
+listings_exp <- read_csv("data/listings.csv.gz")
+
 # Imports the names of the neighborhoods.
 neighbourhoods <- read.csv("data/neighbourhoods.csv",
                            stringsAsFactors = FALSE)
@@ -18,6 +20,7 @@ shinyServer(function(input, output) {
                            
   output$interactive_map <- renderLeaflet({
     listings <- listings %>%
+      filter(room_type %in% input$roomtype) %>%
       filter(price >= input$price_choice[1], price <= input$price_choice[2])
     build_map(listings, input$location)
   })
