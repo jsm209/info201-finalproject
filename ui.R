@@ -1,6 +1,7 @@
 library(shiny)
 library(leaflet)
 library(plotly)
+library(d3treeR)
 
 shinyUI(navbarPage(
   "Airbnb's in Seattle",
@@ -60,7 +61,7 @@ shinyUI(navbarPage(
           on the variable selected. Clicking on the boxes will allow you to 
           explore different neighborhoods of Seattle to see their relationship 
           relative to other neighborhoods."),
-        d3tree2Output("interactive_treemap")
+        d3treeOutput("interactive_treemap")
       )
     )
   ),
