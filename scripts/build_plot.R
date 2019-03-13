@@ -4,7 +4,7 @@ library(plotly)
 build_plot <- function(df, x_axis) {
   plot_data <- full_join(aggregate(number_of_reviews ~ neighbourhood_group,
                                    df, mean),
-                         aggregate(paste(x_axis, "~ neighbourhood_group"),
+                         aggregate(as.formula(paste(x_axis, "~ neighbourhood_group")),
                                    df, mean),
                          by = "neighbourhood_group")
 
