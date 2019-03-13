@@ -10,6 +10,12 @@ neighbourhoods <- read.csv("data/neighbourhoods.csv",
                            stringsAsFactors = FALSE)
 
 shinyServer(function(input, output) {
+  output$dataset <- renderTable(get(input$rand_var)(get(input$dataset_var),
+                                                    input$row_var),
+                                       bordered = T,
+                                       hover = T,
+                                       spacing = 'xs')
+                           
   output$interactive_map <- renderLeaflet({
     build_map(listings, input$location)
   })

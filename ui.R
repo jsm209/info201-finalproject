@@ -4,9 +4,77 @@ library(plotly)
 library(d3treeR) # nolint
 
 shinyUI(navbarPage(
-  "Airbnb's in Seattle",
+  "Airbnb in Seattle",
   tabPanel(
-    "Visual Representation #1", # label for the tab in the navbar
+    "Overview", # label for the tab in the navbar
+    titlePanel("Project Overview"), # show with a title
+    HTML("<h4>Introduction</h4>
+        This report focuses on Airbnb trends in Seattle, using the
+        datasets provided by <a href=insideairbnb.com>InsideAirbnb</a>.
+        <b>InsideAirbnb</b> is <i>'an independent, non-commercial set of tools
+        and data that allows you to explore how Airbnb is really being used in
+        cities around the world.'</i> Specifically, we are focusing on Seattle
+        and working with the listings and neighborhoods datasets.
+        <h4>Main Goals</h4>
+        These are the major questions we are exploring in this report:
+        <ul><li>How does the location and the time of year affect the
+        availability and pricing of Airbnb options?</li>
+        <li>How does the pricing of Airbnb options affect available
+        amenities?</li>
+        <li>Which locations of Seattle Airbnb listings get the most positive
+        reviews and which the most negative?</li>
+        <li>What kind of features and amenities are the most commonly
+        available in Seattle?</li></ul>
+        <h4>Visualizations</h4>
+        To answer the above questions, we have analyzed the data and
+        processed them into three main visualizations: heatmap,
+        interactive tree map, and a scatterplot. Explore these visualizations
+        in their corresponding tabs above!
+        <h4>Preview of Datasets</h4>
+        The two main datasets we are using are listings and neighborhoods,
+        the csv files of which are publicly available on InsideAirbnb.
+        Use the widget below to preview the two datasets by customizable
+        sorting settings."),
+    headerPanel(""), #add extra space
+    sidebarLayout(
+      sidebarPanel(
+        h3("Preview Settings"),
+        selectInput(
+          inputId = "dataset_var",
+          label = "Choose Dataset:",
+          choices = c(
+            "Listings" = "listings",
+            "Neighborhoods" = "neighbourhoods"
+          )
+        ),
+        selectInput(
+          inputId = "rand_var",
+          label = "Arrange:",
+          choices = c(
+            "Default" = "head",
+            "Random" = "sample_n"
+          )
+        ),
+        numericInput(
+          inputId = "row_var",
+          label = "Number of Rows",
+          value = 6
+        ),
+        width = 3
+      ),
+      mainPanel(
+        div(
+          style = "height: 350px; overflow: scroll",
+          tableOutput("dataset")
+        )
+      )
+    ),
+    HTML("        <h4>Summary of Results</h4>
+        These are the main trends that we are seeing in the data:
+         <ul><li></li><li></li><li></li></ul>")
+  ),
+  tabPanel(
+    "Heatmap", # label for the tab in the navbar
     titlePanel("Airbnb Heatmap of Locations in Seattle"), # show with a title
     # This content uses a sidebar layout
     sidebarLayout(
@@ -15,18 +83,22 @@ shinyUI(navbarPage(
         checkboxGroupInput(
           inputId = "location",
           label = "Filter by:",
-          choices = c("Ballard", "Beacon Hill", "Capitol Hill",
-                      "Cascade", "Central Area", "Delridge",
-                      "Downtown", "Interbay", "Lake City",
-                      "Magnolia", "Northgate", "Other neighbourhoods",
-                      "Queen Anne", "Rainier Valley", "Seward Park",
-                      "University District", "West Seattle"),
-          selected = c("Ballard", "Beacon Hill", "Capitol Hill",
-                       "Cascade", "Central Area", "Delridge",
-                       "Downtown", "Interbay", "Lake City",
-                       "Magnolia", "Northgate", "Other neighbourhoods",
-                       "Queen Anne", "Rainier Valley", "Seward Park",
-                       "University District", "West Seattle")
+          choices = c(
+            "Ballard", "Beacon Hill", "Capitol Hill",
+            "Cascade", "Central Area", "Delridge",
+            "Downtown", "Interbay", "Lake City",
+            "Magnolia", "Northgate", "Other neighbourhoods",
+            "Queen Anne", "Rainier Valley", "Seward Park",
+            "University District", "West Seattle"
+          ),
+          selected = c(
+            "Ballard", "Beacon Hill", "Capitol Hill",
+            "Cascade", "Central Area", "Delridge",
+            "Downtown", "Interbay", "Lake City",
+            "Magnolia", "Northgate", "Other neighbourhoods",
+            "Queen Anne", "Rainier Valley", "Seward Park",
+            "University District", "West Seattle"
+          )
         )
       ),
       mainPanel(
@@ -48,10 +120,12 @@ shinyUI(navbarPage(
         selectInput(
           inputId = "tree_map_variable",
           label = "Organize Size By...",
-          choices = c("Price" = "price",
-                      "Days Available" = "availability_365",
-                      "Number of Reviews" = "number_of_reviews",
-                      "Minimum Nights to Stay" = "minimum_nights"),
+          choices = c(
+            "Price" = "price",
+            "Days Available" = "availability_365",
+            "Number of Reviews" = "number_of_reviews",
+            "Minimum Nights to Stay" = "minimum_nights"
+          ),
           selected = "price"
         )
       ),
@@ -87,5 +161,9 @@ shinyUI(navbarPage(
         plotlyOutput("interactive_plot")
       )
     )
-  )
+  ),
+  footer = HTML("<footer>Published by: Group BC5 (<a href=https://github.com/jasnelmoon>Nel Jee Ae Na</a>,
+       <a href=https://github.com/jsm209>Joshua Maza</a>,
+       <a href=https://github.com/rajoshich>Rajoshi Chakravarty</a>,
+       <a href=https://github.com/TasnimHasan>Tasnim Hasan</a>)")
 ))
