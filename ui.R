@@ -1,7 +1,7 @@
 library(shiny)
 library(leaflet)
 library(plotly)
-library(d3treeR)
+library(d3treeR) # nolint
 
 shinyUI(navbarPage(
   "Airbnb's in Seattle",
@@ -58,8 +58,8 @@ shinyUI(navbarPage(
       mainPanel(
         p("This is an interactive tree that groups the smaller neighborhoods of
           Seattle by their general region, then dictates their size depending
-          on the variable selected. Clicking on the boxes will allow you to 
-          explore different neighborhoods of Seattle to see their relationship 
+          on the variable selected. Clicking on the boxes will allow you to
+          explore different neighborhoods of Seattle to see their relationship
           relative to other neighborhoods."),
         d3treeOutput("interactive_treemap")
       )
