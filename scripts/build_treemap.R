@@ -12,7 +12,7 @@ library(dplyr)
 library(treemap)
 library(htmlwidgets)
 library(data.tree)
-library(d3treeR)
+library(d3treeR) # nolint
 
 # "average_by_neighbourhood" takes in a dataframe, which is assumed to be
 # the InsideAirbnb "listings" dataset, and the neighbourhoods dataset
