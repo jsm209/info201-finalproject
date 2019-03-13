@@ -60,7 +60,7 @@ shinyUI(navbarPage(
           on the variable selected. Clicking on the boxes will allow you to 
           explore different neighborhoods of Seattle to see their relationship 
           relative to other neighborhoods."),
-        d3treeOutput("interactive_treemap")
+        d3tree2Output("interactive_treemap")
       )
     )
   ),
