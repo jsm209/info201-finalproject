@@ -5,7 +5,7 @@ source("scripts/build_plot.R")
 # Imports the listings of Airbnbs
 listings <- read.csv("data/listings.csv", stringsAsFactors = FALSE)
 
-listings_exp <- read_csv("data/listings.csv.gz")
+listings_exp <- read.csv("data/listings_exp.csv")
 
 # Imports the names of the neighborhoods.
 neighbourhoods <- read.csv("data/neighbourhoods.csv",
@@ -28,6 +28,8 @@ shinyServer(function(input, output) {
   output$interactive_treemap <- renderD3tree2({
     build_treemap(listings, neighbourhoods, input$tree_map_variable)
   })
+  
+  output$treemap_dataset <- DT::renderDataTable(build_averages_table(listings, neighbourhoods, input$tree_map_variable))
 
   output$interactive_plot <- renderPlotly({
     build_plot(listings, input$x_axis)

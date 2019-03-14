@@ -13,15 +13,27 @@ library(treemap)
 library(htmlwidgets)
 library(data.tree)
 library(d3treeR) # nolint
+library(DT)
 
 # "average_by_neighbourhood" takes in a dataframe, which is assumed to be
 # the InsideAirbnb "listings" dataset, and the neighbourhoods dataset
 # associated with the listings. Then, it will use it to compute averages
 # and associate neighbourhood with its neighbourhood group
 average_by_neighbourhood <- function(data, neighbourhoods) {
-  group_by(data, neighbourhood) %>%
+  
+  # Get relevant columns
+  filtered <- select(
+    data, neighbourhood, price, minimum_nights,
+    number_of_reviews, availability_365
+  )
+  
+  group_by(filtered, neighbourhood) %>%
     summarise_all(funs(mean)) %>%
     left_join(neighbourhoods)
+}
+
+build_averages_table <- function(data, neighbourhoods, variable = "price") {
+  select_(average_by_neighbourhood(data, neighbourhoods), "neighbourhood", "neighbourhood_group", variable)
 }
 
 # "build_treemap" takes in a dataframe, which is assumed to be the InsideAirbnb
@@ -31,14 +43,8 @@ average_by_neighbourhood <- function(data, neighbourhoods) {
 # Will construct an interactive treemap.
 build_treemap <- function(listings, neighbourhoods, variable = "price") {
 
-  # Get relevant columns
-  filtered <- select(
-    listings, neighbourhood, price, minimum_nights,
-    number_of_reviews, availability_365
-  )
-
   # Get averages and associate neighbourhood with its neighbourhood group
-  averages <- average_by_neighbourhood(filtered, neighbourhoods)
+  averages <- average_by_neighbourhood(listings, neighbourhoods)
 
   # Assigns appropriate unit for description depending on question variable
   unit <- ""

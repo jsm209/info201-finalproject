@@ -3,11 +3,12 @@ library(shiny)
 library(leaflet)
 library(plotly)
 library(d3treeR) # nolint
+library(DT)
 
 # Imports the listings of Airbnbs
 listings <- read.csv("data/listings.csv", stringsAsFactors = FALSE)
 
-listings_exp <- read_csv("data/listings.csv.gz")
+listings_exp <- read.csv("data/listings_exp.csv")
 # extract amenities info
 amenities <- listings_exp %>%
   separate_rows(amenities, sep = ",") %>%
@@ -139,15 +140,65 @@ shinyUI(navbarPage(
       )
   )),
   tabPanel(
-    "Interactive Tree Map", # label for the tab in the navbar
-    titlePanel("Tree Map of Airbnbs in Seattle"), # show with a displayed title
-    # This content uses a sidebar layout
+    "Exploration By Neighborhood",
+    titlePanel("Exploration of Airbnbs by neighborhood in Seattle"),
     sidebarLayout(
       sidebarPanel(
+        HTML("
+          This is an interactive treemap that groups the smaller neighborhoods
+          of Seattle by their general region, then <b>dictates their size 
+          depending on the variable selected.</b> 
+          <br />
+          <br />
+          Additionally, a table with neighbourhoods and the selected variable
+          is also provided for a more specific comparison between desired 
+          neighborhoods.
+          <br />
+          <br />
+          <i>Clicking on the boxes will allow you to
+          explore different neighborhoods of Seattle to see their relationship
+          relative to other neighborhoods.</i>
+          <br/>
+          <i>The table of values can be searched using the search bar at the
+          top right of the table, or be sorted by clicking the respective 
+          column name</i>
+          <br />
+          <br />
+          By comparing the sizes of the boxes against the entire city of 
+          Seattle by their relative scale, one can at a glance quickly see 
+          for example:
+          <ul>
+            <li>The neighbourhoods of Seattle that on average, cost 
+                the most.</li>
+            <ul>
+              <li>
+                The most expensive neighborhood on average is 
+                <b>Pike Market</b>, however the most expensive neighborhood
+                group is <b>other neighborhoods</b>. 
+              </li>
+            </ul>
+            <li>The neighbourhoods that on average, have the most availability
+                during the year.</li>
+            <ul>
+              <li>
+                The most available neighborhood on average is <b>International 
+                District</b>. 
+              </li>
+            </ul>
+            <li>The neighbourhoods that on average, get the least amount of 
+                reviews.</li>
+            <ul>
+              <li>
+                The neighbourhood with the least amount of reviews is 
+                <b>South Lake Union.</b>
+              </li>
+            </ul>
+          </ul>
+          "),
         h3("Seattle"),
         selectInput(
           inputId = "tree_map_variable",
-          label = "Organize Size By...",
+          label = "Organize Treemap Size By...",
           choices = c(
             "Price" = "price",
             "Days Available" = "availability_365",
@@ -158,12 +209,8 @@ shinyUI(navbarPage(
         )
       ),
       mainPanel(
-        p("This is an interactive tree that groups the smaller neighborhoods of
-          Seattle by their general region, then dictates their size depending
-          on the variable selected. Clicking on the boxes will allow you to
-          explore different neighborhoods of Seattle to see their relationship
-          relative to other neighborhoods."),
-        d3treeOutput("interactive_treemap")
+        d3treeOutput("interactive_treemap"),
+        DT::dataTableOutput("treemap_dataset")
       )
     )
   ),
@@ -173,6 +220,36 @@ shinyUI(navbarPage(
     # This content uses a sidebar layout
     sidebarLayout(
       sidebarPanel(
+        HTML("
+          Surprisingly, <i>there isn't much of a correlation between the average
+          price per neighbourhood and the overall score.</i> The scores tend to 
+          be high generally regardless of what the price is with the only 
+          outlier being <b>University District</b> which is cheaper than most 
+          neighbourhoods but also has a lower overall score.
+          <br />
+          <br />
+          There is some correlation between the location and the price since
+          <i>some of the neighborhoods with lower location scores are also cheaper
+          on average.</i>
+          <br />
+          <br />
+          The number of people accommodated on average sees a positive
+          correlation midway between the plot which goes to show which
+          neighbourhoods have bigger houses listed as Airbnbs and how the
+          price increases with the number of people that can be accommodated
+          which is expected.
+          <br />
+          <br />
+          <i>We also see a positive correlation between the number of total 
+          reviews and number of reviews per month</i> which tells us which
+          neighbourhoods have consistently more visitors from Airbnb on
+          average.
+          <br />
+          <br />
+          There is a mild negative correlation between the number of total
+          reviews and the year round availability which is to be expected since
+          more availability would mean more visitors and hence, more reviews.
+             "),
         selectInput(
           inputId = "x_axis",
           label = "Compare To:",
