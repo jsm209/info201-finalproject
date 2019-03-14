@@ -1,0 +1,12 @@
+name: seattle-airbnbs-visualization
+title: seattle-airbnbs-visualization
+username:
+account: jasnel
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 789961
+bundleId: 1939874
+url: https://jasnel.shinyapps.io/seattle-airbnbs-visualization/
+when: 1552579212.42824
+asMultiple: FALSE
+asStatic: FALSE

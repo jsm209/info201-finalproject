@@ -1,4 +1,4 @@
-#  AirBnb's in Seattle
+#  AirBnb in Seattle
 
 ## Project Description
 
@@ -38,3 +38,6 @@ The main summary listings dataset contains information regarding listing name, i
 
 - One major challenge we anticipate is understanding the syntax and functions necessary to use shiny and our interactive mapping together in a cohesive graphical user interface.
 - A second major challenge we anticipate is distributing tasks and working as a team remotely over GitHub, because there can be issues with communication, even workloads for everyone, and working towards a common goal.
+
+## Links
+Explore this report on the complete report and visualizations on [Shiny App](https://jasnel.shinyapps.io/seattle-airbnbs-visualization/).
