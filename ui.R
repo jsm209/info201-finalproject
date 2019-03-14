@@ -33,13 +33,14 @@ shinyUI(fluidPage(theme = shinytheme("yeti"),
   tabPanel(
     "Overview", # label for the tab in the navbar
     titlePanel("Project Overview"), # show with a title
-    HTML("<h4>Introduction</h4>
-        This report focuses on Airbnb trends in Seattle, using the
-        datasets provided by <a href=insideairbnb.com>InsideAirbnb</a>.
-        <b>InsideAirbnb</b> is <i>'an independent, non-commercial set of tools
-        and data that allows you to explore how Airbnb is really being used in
-        cities around the world.'</i> Specifically, we are focusing on Seattle
-        and working with the listings and neighborhoods datasets.
+    HTML("<h4>Introduction and Purpose</h4>
+        The purpose of this report is to focus on Airbnb trends in Seattle,
+        using datasets provided by <a href=www.insideairbnb.com>
+        InsideAirbnb</a>. <b>InsideAirbnb</b> is <i>'an independent, 
+        non-commercial set of tools and data that allows you to explore how 
+        Airbnb is really being used in cities around the world'.</i> 
+        Specifically, we are focusing on Seattle and working with the listings
+        and neighborhoods datasets.
         <h4>Preview of Datasets</h4>
         The two main datasets we are using are listings and neighborhoods,
         the csv files of which are publicly available on InsideAirbnb.
