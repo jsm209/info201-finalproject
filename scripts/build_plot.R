@@ -2,6 +2,7 @@ library(tidyverse)
 library(plotly)
 
 build_plot <- function(df, x_axis, y_axis) {
+  # Subset data to use for plot
   plot_data <- full_join(aggregate(
     as.formula(paste(
       x_axis,
@@ -38,6 +39,7 @@ build_plot <- function(df, x_axis, y_axis) {
     xtext <- "Location Score"
   }
 
+  # Building scatter plot
   p <- plot_ly(
     data = plot_data, type = "scatter", mode = "markers",
     x = x1, y = y1, text = ~ paste0(neighbourhood_group_cleansed),
