@@ -5,8 +5,9 @@ source("scripts/build_bar.R")
 
 # Imports the listings of Airbnbs
 listings <- read.csv("data/listings.csv", stringsAsFactors = FALSE)
-
 listings_exp <- read.csv("data/listings_exp.csv", stringsAsFactors = FALSE)
+
+# Removing the $ sign to be able to use for calculations
 listings_exp$price <- as.numeric(gsub("[$, ]", "", listings_exp$price))
 
 # Imports the names of the neighborhoods.
