@@ -4,12 +4,8 @@ source("scripts/build_plot.R")
 
 # Imports the listings of Airbnbs
 listings <- read.csv("data/listings.csv", stringsAsFactors = FALSE)
-<<<<<<< HEAD
 
 listings_exp <- read.csv("data/listings_exp.csv")
-=======
-listings_exp <- read.csv("data/listings.csv.gz", stringsAsFactors = FALSE)
->>>>>>> 0e8f7108a0203e5677e146fdf4a3571d43cbf00e
 
 # Imports the names of the neighborhoods.
 neighbourhoods <- read.csv("data/neighbourhoods.csv",
