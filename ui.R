@@ -36,9 +36,9 @@ shinyUI(fluidPage(theme = shinytheme("yeti"),
     HTML("<h4>Introduction and Purpose</h4>
         The purpose of this report is to focus on Airbnb trends in Seattle,
         using datasets provided by <a href=www.insideairbnb.com>
-        InsideAirbnb</a>. <b>InsideAirbnb</b> is <i>'an independent, 
-        non-commercial set of tools and data that allows you to explore how 
-        Airbnb is really being used in cities around the world'.</i> 
+        InsideAirbnb</a>. <b>InsideAirbnb</b> is <i>'an independent,
+        non-commercial set of tools and data that allows you to explore how
+        Airbnb is really being used in cities around the world'.</i>
         Specifically, we are focusing on Seattle and working with the listings
         and neighborhoods datasets.
         <h4>Preview of Datasets</h4>
