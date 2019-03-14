@@ -47,6 +47,6 @@ shinyServer(function(input, output) {
   })
 
   output$amenitiesplot <- renderPlot({
-    build_amenplot(listings_exp, input$y_var)
+    build_amenplot(listings_exp, input$y_var) # nolint
   })
 })
