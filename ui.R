@@ -4,6 +4,7 @@ library(leaflet)
 library(plotly)
 library(d3treeR) # nolint
 library(DT)
+library(shinythemes)
 
 # Imports the listings of Airbnbs
 listings <- read.csv("data/listings.csv", stringsAsFactors = FALSE)
@@ -26,7 +27,8 @@ neighbourhoods <- read.csv("data/neighbourhoods.csv",
 # Price range
 price_range <- range(listings$price)
 
-shinyUI(navbarPage(
+shinyUI(fluidPage(theme = shinytheme("yeti"),
+  navbarPage(
   "Airbnb in Seattle",
   tabPanel(
     "Overview", # label for the tab in the navbar
@@ -222,6 +224,7 @@ Hill.</li>
          explore different neighborhoods of Seattle to see their relationship
              relative to other neighborhoods.</i>
              <br/>
+             <br />
              <i>The table of values can be searched using the search bar at the
              top right of the table, or be sorted by clicking the respective
              column name.</i><br/>"),
@@ -377,4 +380,4 @@ Hill.</li>
        <a href=https://github.com/jsm209>Joshua Maza</a>,
        <a href=https://github.com/rajoshich>Rajoshi Chakravarty</a>,
        <a href=https://github.com/TasnimHasan>Tasnim Hasan</a>)")
-))
+)))
