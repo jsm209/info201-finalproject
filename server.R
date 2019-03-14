@@ -29,6 +29,6 @@ shinyServer(function(input, output) {
   })
 
   output$interactive_plot <- renderPlotly({
-    build_plot(listings_exp, input$x_axis)
+    build_plot(listings_exp, input$x_axis, input$y_axis)
   })
 })
