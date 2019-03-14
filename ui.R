@@ -251,12 +251,22 @@ shinyUI(navbarPage(
           more availability would mean more visitors and hence, more reviews.
              "),
         selectInput(
-          inputId = "x_axis",
-          label = "Compare To:",
+          inputId = "y_axis",
+          label = "Chosen variable:",
           choices = list(
             "Price" = "price",
+            "Number of Total Reviews" = "number_of_reviews"
+          )
+        ),
+        selectInput(
+          inputId = "x_axis",
+          label = "Compare to:",
+          choices = list(
+            "Overall Review Scores (out of 100)" = "review_scores_rating",
+            "Location Score (out of 10)" = "review_scores_location",
+            "Reviews per Months" = "reviews_per_month",
             "Year-round Availability" = "availability_365",
-            "Reviews per Months" = "reviews_per_month"
+            "No. of people Accomodated (on average)" = "accommodates"
           )
         )
       ),
