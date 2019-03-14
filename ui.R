@@ -178,6 +178,7 @@ shinyUI(navbarPage(
           label = "Compare To:",
           choices = list(
             "Price" = "price",
+            "Overall Review Scores (out of 100)" = "review_scores_rating",
             "Year-round Availability" = "availability_365",
             "Reviews per Months" = "reviews_per_month"
           )

@@ -4,8 +4,7 @@ source("scripts/build_plot.R")
 
 # Imports the listings of Airbnbs
 listings <- read.csv("data/listings.csv", stringsAsFactors = FALSE)
-
-listings_exp <- read_csv("data/listings.csv.gz")
+listings_exp <- read.csv("data/listings.csv.gz", stringsAsFactors = FALSE)
 
 # Imports the names of the neighborhoods.
 neighbourhoods <- read.csv("data/neighbourhoods.csv",
@@ -30,6 +29,6 @@ shinyServer(function(input, output) {
   })
 
   output$interactive_plot <- renderPlotly({
-    build_plot(listings, input$x_axis)
+    build_plot(listings_exp, input$x_axis)
   })
 })
