@@ -8,16 +8,20 @@ library(DT)
 # Imports the listings of Airbnbs
 listings <- read.csv("data/listings.csv", stringsAsFactors = FALSE)
 
-listings_exp <- read.csv("data/listings_exp.csv")
+listings_exp <- read.csv("data/listings_exp.csv", stringsAsFactors = FALSE)
 listings_exp$price <- as.numeric(gsub("[$, ]", "", listings_exp$price))
 
 ratings <- listings_exp %>%
-  select(id, review_scores_rating, neighbourhood_group_cleansed, price, room_type, amenities)
+  select(
+    id, review_scores_rating, neighbourhood_group_cleansed, price,
+    room_type, amenities
+  )
 
 
 # Imports the names of the neighborhoods.
 neighbourhoods <- read.csv("data/neighbourhoods.csv",
-                           stringsAsFactors = FALSE)
+  stringsAsFactors = FALSE
+)
 
 # Price range
 price_range <- range(listings$price)
@@ -40,13 +44,13 @@ shinyUI(navbarPage(
         There are two different datasets available for listings information,
         one being a summary of 16 variables and the other being an extensively
         detailed dataset of 106 variables. The neighborhoods dataset provides a
-        list of neighborhood categorizations used by InsideAirbnb. <br/>
-        Use the widget below to preview the datasets by customizable sorting
-        settings.<br/>"),
-    headerPanel(""), #add extra space
+        list of neighborhood categorizations used by InsideAirbnb."),
+    headerPanel(""),
     sidebarLayout(
       sidebarPanel(
         h4("Preview Settings"),
+        HTML("Use this widget to preview the datasets by customizable sorting
+             options.<br/><br/>"),
         selectInput(
           inputId = "dataset_var",
           label = "Choose Dataset:",
@@ -73,35 +77,63 @@ shinyUI(navbarPage(
       ),
       mainPanel(
         div(
-          style = "height: 350px; overflow: scroll",
+          style = "height: 400px; overflow: scroll",
           tableOutput("dataset")
         )
-      )),
+      )
+    ),
     HTML("<h4>Main Goals</h4>
         These are the major questions we are exploring in this report:
          <ul><li>What kind of Airbnbs are concentrated in what Seattle
          neighborhoods?</li>
-         <li>How does the location/neighborhood of a listing affect the
-         pricing of Airbnb options?</li>
-         <li>What time of year is most popular?</li>
+         <li>How does the location/neighborhood of a listing differ on its
+        characteristics?</li>
          <li>How are Seattle Airbnb listings rated?</li>
         <li>What kind of amenities are available at Seattle Airbnbs?</li></ul>
          <h4>Visualizations</h4>
          To answer the above questions, we have analyzed the data and
          processed them into visualizations in the form of a heatmap,
-         interactive tree map, scatterplots, and bar graphs.
-        Explore these visualizations in their corresponding tabs above!
+         interactive tree map, scatterplots, and bar graphs. Explore the data
+        with the two different kinds of maps or by different variables in their
+       corresponding tabs above!
         <h4>Summary of Results</h4>
         These are the main trends that we have observed in the data:
-         <ul><li></li><li></li><li></li></ul>")
+         <ul><li>Most Airbnb listings are categorized as 'Other neighborhoods',
+        followed by Downtown and Capitol Hill.</li>
+         <li>Downtown has the highest proportion of Entire home/apt type
+        listings.</li>
+        <li>The most amount of shared room types are concentrated in Capitol
+Hill.</li>
+        <li>The average most expensive neighborhood is Pike Market.</li>
+        <li>International District listings have the most availability.</li>
+        <li>There is no correlation between rating score and price.</li>
+        <li>The most commonly offered amenity is Wifi.</li>
+        <li>There is no correlation between amenities and price.</li>
+        <li>There is no correlation between amenities and review ratings
+         scores.</li></ul>")
   ),
   tabPanel(
     "Heatmap", # label for the tab in the navbar
-    titlePanel("Airbnb Heatmap of Locations in Seattle"), # show with a title
+    titlePanel("Heatmap of Seattle Airbnb Locations"), # show with a title
     # This content uses a sidebar layout
+    HTML("This is an interactive heatmap showing the concentrations of Seattle
+        Airbnb listings. In the widget provided below, you can adjust settings
+        to filter by room types, a price range, and neighborhoods. We are using
+        17 neighborhood groupings. You can also zoom into an area of the map
+        and it will adjust accordingly. <br/><br/>
+        We have observed the most Airbnb listings concentrated around
+        Seattle neighborhoods that have popular tourist or scenic attributes,
+        such as Downtown, Capitol Hill, and near lakes/waterfront views. On
+        average, Downtown listings also tend to be more expensive. When
+        observing room types, we saw that Downtown had the most proportion of
+        Entire home/apt types. The least available room type was shared rooms,
+        which were the most concentrated in Capitol Hill.
+        "),
+    headerPanel(""),
     sidebarLayout(
-      sidebarPanel(
-        h3("Heatmap Settings"),
+      sidebarPanel(div(
+        style = "height: 400px; overflow-y: scroll",
+        h4("Heatmap Settings"),
         checkboxGroupInput(
           inputId = "roomtype",
           label = "Room Type:",
@@ -111,7 +143,8 @@ shinyUI(navbarPage(
         sliderInput(
           inputId = "price_choice",
           label = "Price Range",
-          min = price_range[1], max = price_range[2], value = price_range),
+          min = price_range[1], max = price_range[2], value = price_range
+        ),
         checkboxGroupInput(
           inputId = "location",
           label = "Neighborhood:",
@@ -132,72 +165,66 @@ shinyUI(navbarPage(
             "Other neighbourhoods"
           )
         )
-      ),
+      )),
       mainPanel(
-        p("This is an interactive heatmap showing the locations
-          that are the most populated with Airbnb's in the Seattle Area.
-          You can choose to zoom into specific neighbourhood(s) group to see
-          that particular area's Airbnb."),
         leafletOutput("interactive_map")
       )
-  )),
+    )
+  ),
   tabPanel(
-    "Exploration By Neighborhood",
-    titlePanel("Exploration of Airbnbs by neighborhood in Seattle"),
+    "Tree Map",
+    titlePanel("Exploration of Seattle Airbnbs by Neighborhood"),
+    HTML("This is an interactive treemap that groups the smaller neighborhoods
+         of Seattle by their general region, then <b>dictates their size
+         depending on the variable selected.</b>
+         <br />
+         <br />
+         Additionally, a table with neighbourhoods and the selected variable
+         is also provided for a more specific comparison between desired
+         neighborhoods.
+         <br />
+         <br />
+         By comparing the sizes of the boxes against the entire city of
+         Seattle by their relative scale, one can at a glance quickly see
+         for example:
+         <ul>
+         <li>The neighbourhoods of Seattle that on average, cost
+         the most.</li>
+         <ul>
+         <li>
+         The most expensive neighborhood on average is
+         <b>Pike Market</b>, however the most expensive neighborhood
+         group is <b>other neighborhoods</b>.
+         </li>
+         </ul>
+         <li>The neighbourhoods that on average, have the most availability
+         during the year.</li>
+         <ul>
+         <li>
+         The most available neighborhood on average is <b>International
+         District</b>.
+         </li>
+         </ul>
+         <li>The neighbourhoods that on average, get the least amount of
+         reviews.</li>
+         <ul>
+         <li>
+         The neighbourhood with the least amount of reviews is
+         <b>South Lake Union.</b>
+         </li>
+         </ul>
+         </ul>
+         "),
     sidebarLayout(
       sidebarPanel(
-        HTML("
-          This is an interactive treemap that groups the smaller neighborhoods
-          of Seattle by their general region, then <b>dictates their size 
-          depending on the variable selected.</b> 
-          <br />
-          <br />
-          Additionally, a table with neighbourhoods and the selected variable
-          is also provided for a more specific comparison between desired 
-          neighborhoods.
-          <br />
-          <br />
-          <i>Clicking on the boxes will allow you to
-          explore different neighborhoods of Seattle to see their relationship
-          relative to other neighborhoods.</i>
-          <br/>
-          <i>The table of values can be searched using the search bar at the
-          top right of the table, or be sorted by clicking the respective 
-          column name</i>
-          <br />
-          <br />
-          By comparing the sizes of the boxes against the entire city of 
-          Seattle by their relative scale, one can at a glance quickly see 
-          for example:
-          <ul>
-            <li>The neighbourhoods of Seattle that on average, cost 
-                the most.</li>
-            <ul>
-              <li>
-                The most expensive neighborhood on average is 
-                <b>Pike Market</b>, however the most expensive neighborhood
-                group is <b>other neighborhoods</b>. 
-              </li>
-            </ul>
-            <li>The neighbourhoods that on average, have the most availability
-                during the year.</li>
-            <ul>
-              <li>
-                The most available neighborhood on average is <b>International 
-                District</b>. 
-              </li>
-            </ul>
-            <li>The neighbourhoods that on average, get the least amount of 
-                reviews.</li>
-            <ul>
-              <li>
-                The neighbourhood with the least amount of reviews is 
-                <b>South Lake Union.</b>
-              </li>
-            </ul>
-          </ul>
-          "),
-        h3("Seattle"),
+        h4("Map Settings"),
+        HTML("<i>Clicking on the boxes will allow you to
+         explore different neighborhoods of Seattle to see their relationship
+             relative to other neighborhoods.</i>
+             <br/>
+             <i>The table of values can be searched using the search bar at the
+             top right of the table, or be sorted by clicking the respective
+             column name.</i><br/>"),
         selectInput(
           inputId = "tree_map_variable",
           label = "Organize Treemap Size By...",
@@ -223,15 +250,15 @@ shinyUI(navbarPage(
     HTML("The scatterplot provided below compares the number of reviews by the
         chosen variable according to neighbourhood groups in Seattle.
         Surprisingly, <i>there isn't much of a correlation between the average
-          price per neighbourhood and the overall score.</i> The scores tend to 
-         be high generally regardless of what the price is with the only 
-         outlier being <b>University District</b> which is cheaper than most 
+          price per neighbourhood and the overall score.</i> The scores tend to
+         be high generally regardless of what the price is with the only
+         outlier being <b>University District</b> which is cheaper than most
          neighbourhoods but also has a lower overall score.
          <br />
          <br />
          There is some correlation between the location and the price since
-         <i>some of the neighborhoods with lower location scores are also cheaper
-         on average.</i>
+         <i>some of the neighborhoods with lower location scores are also
+        cheaper on average.</i>
          <br />
          <br />
          The number of people accommodated on average sees a positive
@@ -241,7 +268,7 @@ shinyUI(navbarPage(
          which is expected.
          <br />
          <br />
-         <i>We also see a positive correlation between the number of total 
+         <i>We also see a positive correlation between the number of total
          reviews and number of reviews per month</i> which tells us which
          neighbourhoods have consistently more visitors from Airbnb on
          average.
@@ -297,10 +324,10 @@ shinyUI(navbarPage(
           max = 186
         ),
         width = 3
-        ),
+      ),
       mainPanel(
-          plotlyOutput("amenitiesbar"))
-        
+        plotlyOutput("amenitiesbar")
+      )
     ),
     HTML("<h4>Relationship between Amenities and Other Variables</h4>
         This scatterplot shows how other variables may be correlated with the
@@ -313,14 +340,18 @@ shinyUI(navbarPage(
         selectInput(
           inputId = "y_var",
           label = "Choose Other Variable:",
-          choices = c("Price" = "price",
-                      "Overall Review Rating" = "review_scores_rating",
-                      "Superhost" = "host_is_superhost")
-        
-        ), width = 3),
+          choices = c(
+            "Price" = "price",
+            "Overall Review Rating" = "review_scores_rating",
+            "Superhost" = "host_is_superhost"
+          )
+        ),
+        width = 3
+      ),
       mainPanel(
-          plotOutput("amenitiesplot")
-      )),
+        plotOutput("amenitiesplot")
+      )
+    ),
     HTML("<ul><li><b>Price: </b>We can observe that when plotted against price,
         the number of amenities widely vary, with the exception of several
         outliers. They seem to be concentrated on the lower left of the ranges,
@@ -340,8 +371,10 @@ shinyUI(navbarPage(
         that the range of amenities only slightly differ based on superhost
         status. Only about 10 superhost listings offer more amenities than
         non-superhost listings.</li></ul>")
-    ),
-  footer = HTML("<footer>Published by: Group BC5 (<a href=https://github.com/jasnelmoon>Nel Jee Ae Na</a>,
+  ),
+  footer = HTML("<footer>Published by: Group BC5
+      (<a href=https://github.com/jasnelmoon>Nel Jee Ae Na</a>,
        <a href=https://github.com/jsm209>Joshua Maza</a>,
        <a href=https://github.com/rajoshich>Rajoshi Chakravarty</a>,
-       <a href=https://github.com/TasnimHasan>Tasnim Hasan</a>)")))
+       <a href=https://github.com/TasnimHasan>Tasnim Hasan</a>)")
+))

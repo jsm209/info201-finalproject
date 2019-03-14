@@ -20,20 +20,21 @@ library(DT)
 # associated with the listings. Then, it will use it to compute averages
 # and associate neighbourhood with its neighbourhood group
 average_by_neighbourhood <- function(data, neighbourhoods) {
-  
+
   # Get relevant columns
   filtered <- select(
     data, neighbourhood, price, minimum_nights,
     number_of_reviews, availability_365
   )
-  
+
   group_by(filtered, neighbourhood) %>%
     summarise_all(funs(mean)) %>%
     left_join(neighbourhoods)
 }
 
 build_averages_table <- function(data, neighbourhoods, variable = "price") {
-  select_(average_by_neighbourhood(data, neighbourhoods), "neighbourhood", "neighbourhood_group", variable)
+  select_(average_by_neighbourhood(data, neighbourhoods), "neighbourhood",
+          "neighbourhood_group", variable)
 }
 
 # "build_treemap" takes in a dataframe, which is assumed to be the InsideAirbnb
