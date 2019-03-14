@@ -2,6 +2,11 @@ library(dplyr)
 library(plotly)
 
 build_plot <- function(df, x_axis) {
+  # Removing the $ sign to be able to calculate the mean price
+  if (x_axis == "price") {
+    df$price <- as.numeric(gsub("[$, ]", "", df$price))
+  }
+
   plot_data <- full_join(aggregate(
     number_of_reviews ~ neighbourhood_group_cleansed,
     df, mean
@@ -15,13 +20,7 @@ build_plot <- function(df, x_axis) {
   ),
   by = "neighbourhood_group_cleansed"
   )
-  
-  # Removing the $ sign to be able to calculate the mean price
-  if(x_axis == "price") {
-    df$price <- str_replace(df$price, "$", "")
-  }
-  
-  
+
   x1 <- plot_data[[x_axis]]
   y1 <- plot_data[["number_of_reviews"]]
 
@@ -36,7 +35,7 @@ build_plot <- function(df, x_axis) {
 
   p <- plot_ly(
     data = plot_data, type = "scatter", mode = "markers",
-    x = x1, y = y1, text = ~ paste0(neighbourhood_group_cleansed),
+    x = x1, y = y1, text = ~paste0(neighbourhood_group_cleansed),
     marker = list(
       size = 11,
       color = y1
