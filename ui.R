@@ -35,7 +35,7 @@ shinyUI(fluidPage(theme = shinytheme("yeti"),
     titlePanel("Project Overview"), # show with a title
     HTML("<h4>Introduction and Purpose</h4>
         The purpose of this report is to focus on Airbnb trends in Seattle,
-        using datasets provided by <a href=www.insideairbnb.com>
+        using datasets provided by <a href=http://insideairbnb.com/>
         InsideAirbnb</a>. <b>InsideAirbnb</b> is <i>'an independent,
         non-commercial set of tools and data that allows you to explore how
         Airbnb is really being used in cities around the world'.</i>
@@ -183,6 +183,7 @@ Hill.</li>
          <br />
          <br />
          Additionally, a table with neighbourhoods and the selected variable
+         <i>averaged by neighborhood,</i>
          is also provided for a more specific comparison between desired
          neighborhoods.
          <br />
@@ -228,7 +229,9 @@ Hill.</li>
              <br />
              <i>The table of values can be searched using the search bar at the
              top right of the table, or be sorted by clicking the respective
-             column name.</i><br/>"),
+             column name.</i>
+             <br/>
+             <br/>"),
         selectInput(
           inputId = "tree_map_variable",
           label = "Organize Treemap Size By...",

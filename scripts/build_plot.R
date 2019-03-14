@@ -1,6 +1,10 @@
 library(tidyverse)
 library(plotly)
 
+# The build_plot function will take in a dataframe about airbnb lisitings
+# in Seattle, and a given name of an x and y axis, and plot those two axis.
+# The two given axis are assumed to be columns of the data.
+
 build_plot <- function(df, x_axis, y_axis) {
   # Subset data to use for plot
   plot_data <- full_join(aggregate(
