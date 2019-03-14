@@ -1,11 +1,13 @@
 source("scripts/build_map.R")
 source("scripts/build_treemap.R")
 source("scripts/build_plot.R")
+source("scripts/build_bar.R")
 
 # Imports the listings of Airbnbs
 listings <- read.csv("data/listings.csv", stringsAsFactors = FALSE)
 
 listings_exp <- read.csv("data/listings_exp.csv")
+listings_exp$price <- as.numeric(gsub("[$, ]", "", listings_exp$price))
 
 # Imports the names of the neighborhoods.
 neighbourhoods <- read.csv("data/neighbourhoods.csv",
@@ -33,5 +35,13 @@ shinyServer(function(input, output) {
 
   output$interactive_plot <- renderPlotly({
     build_plot(listings_exp, input$x_axis, input$y_axis)
+  })
+  
+  output$amenitiesbar <- renderPlotly({
+    build_percbar(listings_exp, input$topn_var)
+  })
+  
+  output$amenitiesplot <- renderPlot({
+    build_amenplot(listings_exp, input$y_var)
   })
 })

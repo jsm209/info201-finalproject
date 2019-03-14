@@ -9,11 +9,7 @@ library(DT)
 listings <- read.csv("data/listings.csv", stringsAsFactors = FALSE)
 
 listings_exp <- read.csv("data/listings_exp.csv")
-# extract amenities info
-amenities <- listings_exp %>%
-  separate_rows(amenities, sep = ",") %>%
-  select(id, amenities)
-amenities$amenities <- gsub("[{\"}]", "", amenities$amenities)
+listings_exp$price <- as.numeric(gsub("[$, ]", "", listings_exp$price))
 
 ratings <- listings_exp %>%
   select(id, review_scores_rating, neighbourhood_group_cleansed, price, room_type, amenities)
@@ -38,33 +34,25 @@ shinyUI(navbarPage(
         and data that allows you to explore how Airbnb is really being used in
         cities around the world.'</i> Specifically, we are focusing on Seattle
         and working with the listings and neighborhoods datasets.
-        <h4>Main Goals</h4>
-        These are the major questions we are exploring in this report:
-        <ul><li>What kind of Airbnbs are concentrated in what Seattle
-        neighborhoods?</li>
-        <li>How does the location/neighborhood of a listing affect the
-        pricing of Airbnb options?</li>
-        <li>What time of year is most popular?</li>
-        <li>Availability? Amenities? Ratings? </li></ul>
-        <h4>Visualizations</h4>
-        To answer the above questions, we have analyzed the data and
-        processed them into three main visualizations: heatmap,
-        interactive tree map, and a scatterplot. Explore these visualizations
-        in their corresponding tabs above!
         <h4>Preview of Datasets</h4>
         The two main datasets we are using are listings and neighborhoods,
         the csv files of which are publicly available on InsideAirbnb.
-        Use the widget below to preview the two datasets by customizable
-        sorting settings."),
+        There are two different datasets available for listings information,
+        one being a summary of 16 variables and the other being an extensively
+        detailed dataset of 106 variables. The neighborhoods dataset provides a
+        list of neighborhood categorizations used by InsideAirbnb. <br/>
+        Use the widget below to preview the datasets by customizable sorting
+        settings.<br/>"),
     headerPanel(""), #add extra space
     sidebarLayout(
       sidebarPanel(
-        h3("Preview Settings"),
+        h4("Preview Settings"),
         selectInput(
           inputId = "dataset_var",
           label = "Choose Dataset:",
           choices = c(
-            "Listings" = "listings",
+            "Summary Listings" = "listings",
+            "Detailed Listings" = "listings_exp",
             "Neighborhoods" = "neighbourhoods"
           )
         ),
@@ -89,8 +77,22 @@ shinyUI(navbarPage(
           tableOutput("dataset")
         )
       )),
-    HTML("        <h4>Summary of Results</h4>
-        These are the main trends that we are seeing in the data:
+    HTML("<h4>Main Goals</h4>
+        These are the major questions we are exploring in this report:
+         <ul><li>What kind of Airbnbs are concentrated in what Seattle
+         neighborhoods?</li>
+         <li>How does the location/neighborhood of a listing affect the
+         pricing of Airbnb options?</li>
+         <li>What time of year is most popular?</li>
+         <li>How are Seattle Airbnb listings rated?</li>
+        <li>What kind of amenities are available at Seattle Airbnbs?</li></ul>
+         <h4>Visualizations</h4>
+         To answer the above questions, we have analyzed the data and
+         processed them into visualizations in the form of a heatmap,
+         interactive tree map, scatterplots, and bar graphs.
+        Explore these visualizations in their corresponding tabs above!
+        <h4>Summary of Results</h4>
+        These are the main trends that we have observed in the data:
          <ul><li></li><li></li><li></li></ul>")
   ),
   tabPanel(
@@ -215,41 +217,41 @@ shinyUI(navbarPage(
     )
   ),
   tabPanel(
-    "Scatter Plot", # label for the tab in the navbar
-    titlePanel("Scatter Plot of the Number of Reviews v.s. Other Variables"),
+    "Reviews", # label for the tab in the navbar
+    titlePanel("Exploring Reviews and Other Variables"),
     # This content uses a sidebar layout
+    HTML("The scatterplot provided below compares the number of reviews by the
+        chosen variable according to neighbourhood groups in Seattle.
+        Surprisingly, <i>there isn't much of a correlation between the average
+          price per neighbourhood and the overall score.</i> The scores tend to 
+         be high generally regardless of what the price is with the only 
+         outlier being <b>University District</b> which is cheaper than most 
+         neighbourhoods but also has a lower overall score.
+         <br />
+         <br />
+         There is some correlation between the location and the price since
+         <i>some of the neighborhoods with lower location scores are also cheaper
+         on average.</i>
+         <br />
+         <br />
+         The number of people accommodated on average sees a positive
+         correlation midway between the plot which goes to show which
+         neighbourhoods have bigger houses listed as Airbnbs and how the
+         price increases with the number of people that can be accommodated
+         which is expected.
+         <br />
+         <br />
+         <i>We also see a positive correlation between the number of total 
+         reviews and number of reviews per month</i> which tells us which
+         neighbourhoods have consistently more visitors from Airbnb on
+         average.
+         <br />
+         <br />
+         There is a mild negative correlation between the number of total
+         reviews and the year round availability which is to be expected since
+         more availability would mean more visitors and hence, more reviews."),
     sidebarLayout(
       sidebarPanel(
-        HTML("
-          Surprisingly, <i>there isn't much of a correlation between the average
-          price per neighbourhood and the overall score.</i> The scores tend to 
-          be high generally regardless of what the price is with the only 
-          outlier being <b>University District</b> which is cheaper than most 
-          neighbourhoods but also has a lower overall score.
-          <br />
-          <br />
-          There is some correlation between the location and the price since
-          <i>some of the neighborhoods with lower location scores are also cheaper
-          on average.</i>
-          <br />
-          <br />
-          The number of people accommodated on average sees a positive
-          correlation midway between the plot which goes to show which
-          neighbourhoods have bigger houses listed as Airbnbs and how the
-          price increases with the number of people that can be accommodated
-          which is expected.
-          <br />
-          <br />
-          <i>We also see a positive correlation between the number of total 
-          reviews and number of reviews per month</i> which tells us which
-          neighbourhoods have consistently more visitors from Airbnb on
-          average.
-          <br />
-          <br />
-          There is a mild negative correlation between the number of total
-          reviews and the year round availability which is to be expected since
-          more availability would mean more visitors and hence, more reviews.
-             "),
         selectInput(
           inputId = "y_axis",
           label = "Chosen variable:",
@@ -271,12 +273,74 @@ shinyUI(navbarPage(
         )
       ),
       mainPanel(
-        p("This plot compares the number of reviews by the chosen variable
-          according to neighbourhood groups in Seattle"),
         plotlyOutput("interactive_plot")
       )
     )
   ),
+  tabPanel(
+    "Amenities", # label for the tab in the navbar
+    titlePanel("Amenities Offered at an Airbnb"),
+    # This content uses a sidebar layout
+    HTML("<h4>Most Common Amenities</h4>
+        This bar chart shows the most common amenities offered at Seattle
+        Airbnb listings. The most commonly offered amenity is <b>Wifi</b> at
+        <i>97.9%</i> of all Seattle Airbnb listings. Adjust the settings
+        below to see what percentage of listings offer what type of
+        amenities.<br/><br/>"),
+    sidebarLayout(
+      sidebarPanel(
+        numericInput(
+          inputId = "topn_var",
+          label = "Number of Amenities",
+          value = 6,
+          min = 1,
+          max = 186
+        ),
+        width = 3
+        ),
+      mainPanel(
+          plotlyOutput("amenitiesbar"))
+        
+    ),
+    HTML("<h4>Relationship between Amenities and Other Variables</h4>
+        This scatterplot shows how other variables may be correlated with the
+        number of amenities offered at an Airbnb listing.
+        The available variables to choose from are price, overall review
+        ratings, and whether or not the host is a superhost. These
+        variables are then plotted against the number of amenities."),
+    sidebarLayout(
+      sidebarPanel(
+        selectInput(
+          inputId = "y_var",
+          label = "Choose Other Variable:",
+          choices = c("Price" = "price",
+                      "Overall Review Rating" = "review_scores_rating",
+                      "Superhost" = "host_is_superhost")
+        
+        ), width = 3),
+      mainPanel(
+          plotOutput("amenitiesplot")
+      )),
+    HTML("<ul><li><b>Price: </b>We can observe that when plotted against price,
+        the number of amenities widely vary, with the exception of several
+        outliers. They seem to be concentrated on the lower left of the ranges,
+        near the average number of amenities. There seems to be no correlation
+        between the price and the number of amenities.</li>
+        <li><b>Reviews: </b>When plotted against the overall review ratings
+        (max 100), we see a concentration of observations in the upper
+        region of the graph. This may be partly due to majority of Airbnb
+        reviewers leaving highly positive reviews. There does not seem to be a
+        very strong correlation between number of amenities and review ratings.
+        However, when looking at observations closer to outliers, we can see
+        that listings with high number of amenities have positive reviews and
+        listings with negative reviews offer less amenities.</li>
+        <li><b>Superhost: </b>Airbnb provides specific criteria for hosts to
+        earn a Superhost status. They are generally seen as superior to other
+        hosts and their listings. Plotted t for true and f for false, we see
+        that the range of amenities only slightly differ based on superhost
+        status. Only about 10 superhost listings offer more amenities than
+        non-superhost listings.</li></ul>")
+    ),
   footer = HTML("<footer>Published by: Group BC5 (<a href=https://github.com/jasnelmoon>Nel Jee Ae Na</a>,
        <a href=https://github.com/jsm209>Joshua Maza</a>,
        <a href=https://github.com/rajoshich>Rajoshi Chakravarty</a>,

@@ -1,10 +1,7 @@
-library(dplyr)
+library(tidyverse)
 library(plotly)
 
 build_plot <- function(df, x_axis, y_axis) {
-  # Removing the $ sign to be able to calculate the mean price
-  df$price <- as.numeric(gsub("[$, ]", "", df$price))
-  
   plot_data <- full_join(aggregate(
     as.formula(paste(
       x_axis,
@@ -57,4 +54,34 @@ build_plot <- function(df, x_axis, y_axis) {
     )
   
   return(p)
+}
+
+build_amenplot <- function(data, y_var){
+  # subset data to amenities
+  amenities <- data %>%
+    separate_rows(amenities, sep = ",")
+  amenities$amenities <- gsub("[{\"}]", "", amenities$amenities)
+  amenities <- amenities %>% group_by(id) %>%
+    summarise(count = n())
+  df <- full_join(amenities, data)
+  
+  if (y_var == "price"){
+    y_text <- "Price"
+  }
+  if(y_var == "review_scores_rating"){
+    y_text <- "Overall Review Rating"
+  }
+  if(y_var == "host_is_superhost"){
+    y_text <- "Superhost"
+  }
+  
+  df %>%
+    ggplot(aes(x = count, y = df[[y_var]])) +
+    geom_point() +
+    geom_smooth() +
+    labs(title = paste0("Relationship between Amenities and ", y_text),
+         x = "Number of Amenities",
+         y = y_text) %>%
+    return()
+  
 }
