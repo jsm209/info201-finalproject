@@ -125,11 +125,11 @@ Hill.</li>
         and it will adjust accordingly. <br/><br/>
         We have observed the most Airbnb listings concentrated around
         Seattle neighborhoods that have popular tourist or scenic attributes,
-        such as Downtown, Capitol Hill, and near lakes/waterfront views. On
-        average, Downtown listings also tend to be more expensive. When
-        observing room types, we saw that Downtown had the most proportion of
-        Entire home/apt types. The least available room type was shared rooms,
-        which were the most concentrated in Capitol Hill.
+        such as <b>Downtown, Capitol Hill,</b> and near lakes/waterfront views.
+        On average, <i>Downtown listings also tend to be more expensive</i>.
+        When observing room types, we saw that Downtown had the most proportion
+        of Entire home/apt types. The least available room type was shared
+        rooms, which were the most concentrated in <b>Capitol Hill.</b>
         "),
     headerPanel(""),
     sidebarLayout(
